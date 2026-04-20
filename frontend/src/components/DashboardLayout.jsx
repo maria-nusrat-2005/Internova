@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Bell, User } from 'lucide-react';
+import { Bell, User, LogOut } from 'lucide-react';
 
 const DashboardLayout = ({ children, role }) => {
   const location = useLocation();
@@ -14,6 +14,7 @@ const DashboardLayout = ({ children, role }) => {
 
   const handleLogout = () => {
     localStorage.removeItem('userRole');
+    localStorage.removeItem('token');
     navigate('/login');
   };
 
@@ -60,6 +61,15 @@ const DashboardLayout = ({ children, role }) => {
           <Link to="/dashboard/profile" className="w-9 h-9 rounded-full overflow-hidden border border-white/10 hover:border-[#8B7CFF] transition-colors cursor-pointer bg-[#131B2B] flex items-center justify-center">
              <User className="w-5 h-5 text-gray-400" />
           </Link>
+
+          <button 
+            onClick={handleLogout}
+            className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-gray-400 hover:text-white hover:bg-[#1A2235] rounded-xl transition-all border border-transparent hover:border-white/10"
+            title="Log out"
+          >
+            <LogOut className="w-4 h-4" />
+            <span className="hidden sm:inline-block tracking-wider uppercase text-xs">Logout</span>
+          </button>
         </div>
       </header>
 

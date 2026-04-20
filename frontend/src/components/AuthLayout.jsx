@@ -73,7 +73,7 @@ const AuthLayout = ({ children }) => {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between text-xs text-gray-500 font-medium">
           <div className="flex flex-col mb-4 md:mb-0">
             <span className="text-white text-sm font-bold mb-1">Internova</span>
-            <span>© 2026 INTERNOVA. CREATED BY MARIA NUSRAT (241061004).</span>
+            <span>© 2026 INTERNOVA.</span>
           </div>
           <div className="flex gap-8">
             <a href="#" className="hover:text-white transition-colors">PRIVACY</a>
