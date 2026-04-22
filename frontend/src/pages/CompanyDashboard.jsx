@@ -1,7 +1,58 @@
-import React from 'react';
-import { Users, FilePlus, Eye, TrendingUp, CheckCircle, ChevronRight } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Users, FilePlus, Eye, TrendingUp, CheckCircle, ChevronRight, X } from 'lucide-react';
 
-const CompanyDashboard = () => {
+const CompanyDashboard = () => सोचने
+  const [internships, setInternships] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    location: '',
+    type: 'On-site',
+  });
+
+  useEffect(() => {
+    fetchInternships();
+  }, []);
+
+  const fetchInternships = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/internships');
+      if (response.ok) {
+        const data = await response.json();
+        setInternships(data);
+      }
+    } catch (error) {
+      console.error('Error fetching internships:', error);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleCreatePosting = async (e) => {
+    e.preventDefault();
+    try {
+      const payload = {
+        ...formData,
+        company: 'Internova', // Mock company for now
+      };
+      const response = await fetch('http://localhost:5000/api/internships', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (response.ok) {
+        setIsModalOpen(false);
+        setFormData({ title: '', description: '', location: '', type: 'On-site' });
+        fetchInternships();
+      }
+    } catch (error) {
+      console.error('Error creating internship:', error);
+    }
+  };
+
   return (
     <div className="space-y-8">
       {/* Header section */}
@@ -10,7 +61,10 @@ const CompanyDashboard = () => {
           <h1 className="text-3xl font-bold text-white mb-2">Company Overview</h1>
           <p className="text-gray-400">Manage your active postings and review top matched candidates.</p>
         </div>
-        <button className="hidden sm:flex items-center py-2.5 px-4 bg-[#8B7CFF] hover:bg-white text-[#131B2B] rounded-lg font-bold text-sm transition-colors shadow-lg">
+        <button 
+          onClick={() => setIsModalOpen(true)}
+          className="hidden sm:flex items-center py-2.5 px-4 bg-[#8B7CFF] hover:bg-white text-[#131B2B] rounded-lg font-bold text-sm transition-colors shadow-lg"
+        >
           <FilePlus className="w-4 h-4 mr-2" />
           Create New Posting
         </button>
@@ -50,31 +104,31 @@ const CompanyDashboard = () => {
           </div>
           
           <div className="space-y-4">
-            {[
-              { title: 'Frontend Developer Intern', applicants: 45, matches: 12, status: 'Active' },
-              { title: 'Backend Node.js Intern', applicants: 32, matches: 8, status: 'Active' },
-              { title: 'UI/UX Designer Intern', applicants: 51, matches: 4, status: 'Reviewing' }
-            ].map((post, idx) => (
-              <div key={idx} className="bg-[#131B2B] p-5 rounded-xl border border-white/5 hover:border-[#8B7CFF]/30 transition-colors flex flex-col sm:flex-row justify-between gap-4 cursor-pointer group">
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-bold text-white text-lg">{post.title}</h3>
-                    <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full ${post.status === 'Active' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-500 border border-amber-500/20'}`}>
-                      {post.status}
-                    </span>
+            {internships.length === 0 ? (
+              <p className="text-gray-400 text-sm">No active postings yet.</p>
+            ) : (
+              internships.map((post) => (
+                <div key={post._id} className="bg-[#131B2B] p-5 rounded-xl border border-white/5 hover:border-[#8B7CFF]/30 transition-colors flex flex-col sm:flex-row justify-between gap-4 cursor-pointer group">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="font-bold text-white text-lg">{post.title}</h3>
+                      <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full ${post.status === 'Active' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-500 border border-amber-500/20'}`}>
+                        {post.status}
+                      </span>
+                    </div>
+                    <p className="text-gray-400 text-sm">{post.applicantsCount || 0} Total Applicants • {post.type} • {post.location}</p>
                   </div>
-                  <p className="text-gray-400 text-sm">{post.applicants} Total Applicants</p>
-                </div>
-                
-                <div className="flex items-center gap-4">
-                  <div className="text-right">
-                    <div className="text-[#8B7CFF] font-bold text-lg">{post.matches}</div>
-                    <div className="text-gray-500 text-xs font-semibold uppercase tracking-wider">Top Matches</div>
+                  
+                  <div className="flex items-center gap-4">
+                    <div className="text-right">
+                      <div className="text-[#8B7CFF] font-bold text-lg">{post.matchesCount || 0}</div>
+                      <div className="text-gray-500 text-xs font-semibold uppercase tracking-wider">Top Matches</div>
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-gray-500 group-hover:text-white transition-colors hidden sm:block" />
                   </div>
-                  <ChevronRight className="w-5 h-5 text-gray-500 group-hover:text-white transition-colors hidden sm:block" />
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
 
@@ -127,6 +181,65 @@ const CompanyDashboard = () => {
         </div>
 
       </div>
+
+      {/* Create Posting Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-[#131B2B] rounded-2xl border border-white/10 shadow-2xl w-full max-w-lg overflow-hidden">
+            <div className="flex justify-between items-center p-6 border-b border-white/5">
+              <h2 className="text-xl font-bold text-white">Create New Posting</h2>
+              <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-white transition-colors">
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            <form onSubmit={handleCreatePosting} className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-bold text-gray-300 mb-1">Internship Title</label>
+                <input 
+                  type="text" name="title" value={formData.title} onChange={handleInputChange} required
+                  className="w-full bg-[#0B0F19] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#8B7CFF] transition-colors"
+                  placeholder="e.g. Frontend Developer Intern"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-bold text-gray-300 mb-1">Location</label>
+                <input 
+                  type="text" name="location" value={formData.location} onChange={handleInputChange} required
+                  className="w-full bg-[#0B0F19] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#8B7CFF] transition-colors"
+                  placeholder="e.g. Dhaka, Bangladesh"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-bold text-gray-300 mb-1">Work Type</label>
+                <select 
+                  name="type" value={formData.type} onChange={handleInputChange}
+                  className="w-full bg-[#0B0F19] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#8B7CFF] transition-colors appearance-none"
+                >
+                  <option value="On-site">On-site</option>
+                  <option value="Remote">Remote</option>
+                  <option value="Hybrid">Hybrid</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-bold text-gray-300 mb-1">Description</label>
+                <textarea 
+                  name="description" value={formData.description} onChange={handleInputChange} required rows="3"
+                  className="w-full bg-[#0B0F19] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#8B7CFF] transition-colors resize-none"
+                  placeholder="Briefly describe the role..."
+                ></textarea>
+              </div>
+              <div className="pt-4 flex justify-end gap-3">
+                <button type="button" onClick={() => setIsModalOpen(false)} className="px-5 py-2.5 rounded-xl font-bold text-gray-300 hover:text-white hover:bg-white/5 transition-colors">
+                  Cancel
+                </button>
+                <button type="submit" className="px-5 py-2.5 bg-[#8B7CFF] hover:bg-white text-[#131B2B] rounded-xl font-bold transition-colors">
+                  Post Internship
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

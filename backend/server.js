@@ -17,20 +17,18 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const { MongoMemoryServer } = require('mongodb-memory-server');
-
 const startServer = async () => {
   try {
-    console.log('Booting up temporary database... (This may take a moment if it is downloading binaries)');
-    // Always use in-memory database to guarantee it works without local setup
-    const mongoServer = await MongoMemoryServer.create();
-    const mongoUri = mongoServer.getUri();
+    const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/internship_matching';
     
     await mongoose.connect(mongoUri);
-    console.log('Connected to In-Memory MongoDB successfully!');
+    console.log(`Connected to MongoDB successfully at ${mongoUri}`);
     
+    const internshipRoutes = require('./routes/internshipRoutes');
+
     // Routes
     app.use('/api/auth', authRoutes);
+    app.use('/api/internships', internshipRoutes);
 
     app.get('/', (req, res) => {
       res.send('Smart Internship Matching System API is running...');

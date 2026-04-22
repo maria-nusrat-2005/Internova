@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Camera, Save, Plus, X, Lock, User, Mail, Briefcase, Code, BookOpen, Link as LinkIcon, CheckCircle2, Edit2 } from 'lucide-react';
+import { Camera, Save, Plus, X, Lock, User, Mail, Briefcase, Code, BookOpen, Link as LinkIcon, CheckCircle2, Edit2, AlertTriangle } from 'lucide-react';
 
 const ProfileSettings = ({ role }) => {
   const [profilePic, setProfilePic] = useState(null);
@@ -19,7 +20,6 @@ const ProfileSettings = ({ role }) => {
 
   const [projects, setProjects] = useState([]);
   const [newProject, setNewProject] = useState({ title: '', link: '' });
-  const [editingProjectIdx, setEditingProjectIdx] = useState(null);
 
   const [experience, setExperience] = useState('');
 
@@ -27,6 +27,7 @@ const ProfileSettings = ({ role }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const navigate = useNavigate();
 
   // Fetch Data on Mount
   useEffect(() => {
@@ -87,21 +88,9 @@ const ProfileSettings = ({ role }) => {
   const handleAddOrUpdateProject = (e) => {
     e.preventDefault();
     if (newProject.title.trim() && newProject.link.trim()) {
-      if (editingProjectIdx !== null) {
-        const updatedProjects = [...projects];
-        updatedProjects[editingProjectIdx] = newProject;
-        setProjects(updatedProjects);
-        setEditingProjectIdx(null);
-      } else {
-        setProjects([...projects, newProject]);
-      }
+      setProjects([...projects, newProject]);
       setNewProject({ title: '', link: '' });
     }
-  };
-
-  const handleEditProject = (idx) => {
-    setNewProject(projects[idx]);
-    setEditingProjectIdx(idx);
   };
 
   const handleSaveAll = async () => {
@@ -144,6 +133,8 @@ const ProfileSettings = ({ role }) => {
       setErrorMsg(error.response?.data?.message || 'Failed to save profile.');
     }
   };
+
+
 
   if (isLoading) {
     return <div className="text-white text-center py-20">Loading profile data...</div>;
@@ -345,7 +336,7 @@ const ProfileSettings = ({ role }) => {
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h3 className="text-xl font-bold text-white mb-1">Project Portfolio</h3>
-                <p className="text-sm text-gray-400">Showcase real-world applications of your skills. You can post, edit, and delete them.</p>
+                <p className="text-sm text-gray-400">Showcase real-world applications of your skills. You can post them here.</p>
               </div>
               <LinkIcon className="w-6 h-6 text-[#8B7CFF]" />
             </div>
@@ -353,15 +344,7 @@ const ProfileSettings = ({ role }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
               {projects.length === 0 && <span className="text-sm text-gray-600 italic col-span-2">No projects added yet.</span>}
               {projects.map((project, idx) => (
-                <div key={idx} className={`group flex flex-col bg-[#06090F] p-5 rounded-2xl border ${editingProjectIdx === idx ? 'border-[#8B7CFF]' : 'border-white/5'} hover:border-[#8B7CFF]/30 transition-colors relative`}>
-                  <div className="absolute top-4 right-4 flex gap-2">
-                    <button onClick={() => handleEditProject(idx)} className="text-gray-600 hover:text-white transition-colors bg-[#131B2B] rounded-full p-1.5 border border-white/5">
-                      <Edit2 className="w-3 h-3" />
-                    </button>
-                    <button onClick={() => setProjects(projects.filter((_, i) => i !== idx))} className="text-gray-600 hover:text-red-400 transition-colors bg-[#131B2B] rounded-full p-1.5 border border-white/5">
-                      <X className="w-3 h-3" />
-                    </button>
-                  </div>
+                <div key={idx} className={`group flex flex-col bg-[#06090F] p-5 rounded-2xl border border-white/5 hover:border-[#8B7CFF]/30 transition-colors relative`}>
                   <h4 className="text-base font-bold text-white mb-2 pr-16">{project.title}</h4>
                   <a href={`https://${project.link.replace('https://', '')}`} target="_blank" rel="noreferrer" className="text-sm font-medium text-[#8B7CFF] hover:text-white transition-colors flex items-center mt-auto">
                     <LinkIcon className="w-4 h-4 mr-1.5" /> {project.link}
@@ -386,16 +369,13 @@ const ProfileSettings = ({ role }) => {
                 className="flex-[2] bg-[#06090F] border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:border-[#8B7CFF] focus:ring-1 focus:ring-[#8B7CFF] outline-none transition-all"
               />
               <button type="submit" className="flex items-center justify-center bg-[#8B7CFF] hover:bg-[#7a6ce0] text-white px-6 py-3 rounded-xl text-sm font-bold transition-colors whitespace-nowrap">
-                {editingProjectIdx !== null ? <Save className="w-4 h-4 mr-1.5" /> : <Plus className="w-4 h-4 mr-1.5" />}
-                {editingProjectIdx !== null ? 'Update' : 'Post'}
+                <Plus className="w-4 h-4 mr-1.5" />
+                Post
               </button>
-              {editingProjectIdx !== null && (
-                <button type="button" onClick={() => { setEditingProjectIdx(null); setNewProject({title:'', link:''}); }} className="flex items-center justify-center bg-transparent border border-white/10 hover:bg-white/5 text-gray-300 px-4 py-3 rounded-xl text-sm font-bold transition-colors">
-                  Cancel
-                </button>
-              )}
             </form>
           </div>
+
+
 
         </div>
       </div>
