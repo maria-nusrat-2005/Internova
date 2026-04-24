@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Users, FilePlus, Eye, TrendingUp, CheckCircle, ChevronRight, X } from 'lucide-react';
 
-const CompanyDashboard = () => सोचने
+const CompanyDashboard = () => {
   const [internships, setInternships] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({

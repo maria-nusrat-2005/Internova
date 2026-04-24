@@ -149,7 +149,7 @@ const ProfileSettings = ({ role }) => {
         
         <div className="relative z-10">
           <p className="text-[#8B7CFF] tracking-widest text-xs font-bold uppercase mb-2">Account Management</p>
-          <h1 className="text-3xl font-bold text-white mb-2 tracking-tight">Curate Your Profile</h1>
+          <h1 className="text-3xl font-bold text-white mb-2 tracking-tight">Create Your Profile</h1>
           <p className="text-gray-400 text-sm max-w-xl">
             This information is saved to the database and used by our AI matching engine.
           </p>

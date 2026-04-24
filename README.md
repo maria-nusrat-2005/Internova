@@ -27,3 +27,14 @@ Creating an authentication page (like Login or Register) involves building parts
   * On submission, they send an HTTP request (using `fetch` or `axios`) to the backend API endpoints.
   * Upon a successful response, the frontend stores the received JWT (usually in `localStorage`) and uses React Router to redirect the user to their appropriate dashboard based on their selected role.
 
+
+
+
+### 1. Internship Posting (Create & Read)
+- **Backend**: Added an `Internship` model (`backend/models/Internship.js`) to store internship details (title, company, description, location, type, status). Created corresponding API routes and controller logic (`POST /api/internships` and `GET /api/internships`).
+- **Frontend**: Updated the `CompanyDashboard.jsx` to dynamically fetch and display active internships from the database. Implemented a "Create New Posting" modal form allowing companies to post new opportunities.
+- *(Note: Update and Delete functionality for internships has been deferred to other team members.)*
+
+### 2. Profile Settings Streamlining
+- **UI Adjustments**: Removed the "Danger Zone" account deletion functionality from `ProfileSettings.jsx`.
+- **Project Portfolio**: Removed the ability to edit or delete projects within the portfolio section to align with the "post and view only" scope assignment.
