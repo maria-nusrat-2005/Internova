@@ -1,21 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Bell, User, LogOut } from 'lucide-react';
+import { Bell, User, LogOut, Search, X } from 'lucide-react';
 
 const DashboardLayout = ({ children, role }) => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const navItems = [
-    { name: 'Dashboard', path: '/dashboard' },
-    { name: 'Discovery', path: '/dashboard/discovery' },
-    { name: 'Profile', path: '/dashboard/profile' },
-  ];
+  const navItems = role === 'company'
+    ? [
+        { name: 'Dashboard', path: '/dashboard' },
+        { name: 'Talent', path: '/dashboard/discovery' },
+        { name: 'Insights', path: '/dashboard/insights' },
+        { name: 'Company', path: '/dashboard/profile' },
+      ]
+    : [
+        { name: 'Dashboard', path: '/dashboard' },
+        { name: 'Discovery', path: '/dashboard/discovery' },
+        { name: 'Profile', path: '/dashboard/profile' },
+      ];
 
   const handleLogout = () => {
     localStorage.removeItem('userRole');
     localStorage.removeItem('token');
     navigate('/login');
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      // Navigate to discovery with search query
+      navigate(`/dashboard/discovery?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchOpen(false);
+      setSearchQuery('');
+    }
   };
 
   return (
@@ -31,7 +50,6 @@ const DashboardLayout = ({ children, role }) => {
         {/* Navigation Links */}
         <nav className="hidden md:flex items-center gap-8">
           {navItems.map((item) => {
-            // Very simple active check
             const isActive = location.pathname === item.path || 
                              (item.path === '/dashboard' && location.pathname === '/dashboard/');
             return (
@@ -52,7 +70,41 @@ const DashboardLayout = ({ children, role }) => {
         </nav>
 
         {/* Right Icons */}
-        <div className="flex items-center gap-6 w-48 justify-end">
+        <div className="flex items-center gap-4 justify-end">
+          
+          {/* Search */}
+          <div className="relative">
+            {searchOpen ? (
+              <form onSubmit={handleSearch} className="flex items-center">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder={role === 'company' ? 'Search talent...' : 'Search internships...'}
+                    autoFocus
+                    className="w-56 bg-[#131B2B] border border-white/10 rounded-xl pl-9 pr-9 py-2 text-sm text-white placeholder-gray-500 focus:border-[#8B7CFF] focus:ring-1 focus:ring-[#8B7CFF] outline-none transition-all"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => { setSearchOpen(false); setSearchQuery(''); }}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <button
+                onClick={() => setSearchOpen(true)}
+                className="text-gray-400 hover:text-white transition-colors p-2 hover:bg-[#131B2B] rounded-xl"
+              >
+                <Search className="w-5 h-5" />
+              </button>
+            )}
+          </div>
+
           <button className="text-gray-400 hover:text-white transition-colors relative">
             <Bell className="w-5 h-5" />
             <span className="absolute top-0 right-0 w-2 h-2 bg-[#8B7CFF] rounded-full border border-[#0B0F19]"></span>
