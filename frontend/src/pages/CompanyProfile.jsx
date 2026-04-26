@@ -56,9 +56,9 @@ const CompanyProfile = () => {
   return (
     <div className="max-w-6xl mx-auto pb-12">
       {/* Hero Header */}
-      <div className="mb-10">
+      <div className="mb-8 sm:mb-10">
         <p className="text-[#8B7CFF] tracking-widest text-xs font-bold uppercase mb-3">Onboarding Phase</p>
-        <h1 className="text-5xl font-bold text-white tracking-tight leading-tight mb-2">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-tight mb-2">
           Establish<br /><span className="text-[#8B7CFF]">Your Legacy.</span>
         </h1>
         <p className="text-gray-400 text-sm max-w-lg leading-relaxed">
@@ -67,37 +67,37 @@ const CompanyProfile = () => {
       </div>
 
       {/* Step Indicators */}
-      <div className="grid grid-cols-4 gap-3 mb-10">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 mb-8 sm:mb-10">
         {STEPS.map((step) => (
           <button key={step.id} onClick={() => setActiveStep(step.id)}
-            className={`flex items-center gap-3 px-4 py-3.5 rounded-xl text-left transition-all border ${
+            className={`flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-3 sm:py-3.5 rounded-xl text-left transition-all border ${
               activeStep === step.id
                 ? 'bg-[#8B7CFF] border-[#8B7CFF] text-white shadow-lg shadow-[#8B7CFF]/20'
                 : 'bg-[#131B2B] border-white/5 text-gray-400 hover:border-white/10'
             }`}>
-            <span className={`text-lg font-bold ${activeStep === step.id ? 'text-white/70' : 'text-gray-600'}`}>0{step.id}</span>
+            <span className={`text-base sm:text-lg font-bold ${activeStep === step.id ? 'text-white/70' : 'text-gray-600'}`}>0{step.id}</span>
             <div>
-              <p className={`text-sm font-bold ${activeStep === step.id ? 'text-white' : 'text-gray-300'}`}>{step.label}</p>
-              <p className={`text-[10px] tracking-wider uppercase ${activeStep === step.id ? 'text-white/60' : 'text-gray-500'}`}>{step.sub}</p>
+              <p className={`text-xs sm:text-sm font-bold ${activeStep === step.id ? 'text-white' : 'text-gray-300'}`}>{step.label}</p>
+              <p className={`text-[9px] sm:text-[10px] tracking-wider uppercase ${activeStep === step.id ? 'text-white/60' : 'text-gray-500'}`}>{step.sub}</p>
             </div>
           </button>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
         {/* Main Content — Left 2/3 */}
-        <div className="lg:col-span-2 space-y-8">
+        <div className="lg:col-span-2 space-y-6 sm:space-y-8">
 
           {/* ═══ STEP 1: IDENTITY ═══ */}
           {activeStep === 1 && (
             <>
-              <div className="bg-[#131B2B] rounded-2xl border border-white/5 p-8 shadow-xl">
-                <h2 className="text-xl font-bold text-white mb-6">Company Identity</h2>
+              <div className="bg-[#131B2B] rounded-2xl border border-white/5 p-5 sm:p-8 shadow-xl">
+                <h2 className="text-lg sm:text-xl font-bold text-white mb-5 sm:mb-6">Company Identity</h2>
                 {/* Logo Upload */}
-                <div className="flex items-center gap-6 mb-8">
+                <div className="flex items-center gap-4 sm:gap-6 mb-6 sm:mb-8">
                   <div className="relative group cursor-pointer" onClick={() => logoRef.current.click()}>
-                    <div className="w-24 h-24 rounded-2xl bg-[#06090F] border-2 border-dashed border-white/10 flex items-center justify-center overflow-hidden group-hover:border-[#8B7CFF]/50 transition-all">
-                      {logo ? <img src={logo} alt="Logo" className="w-full h-full object-cover" /> : <Upload className="w-8 h-8 text-gray-600" />}
+                    <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-[#06090F] border-2 border-dashed border-white/10 flex items-center justify-center overflow-hidden group-hover:border-[#8B7CFF]/50 transition-all">
+                      {logo ? <img src={logo} alt="Logo" className="w-full h-full object-cover" /> : <Upload className="w-6 sm:w-8 h-6 sm:h-8 text-gray-600" />}
                     </div>
                     <input type="file" ref={logoRef} onChange={handleLogoUpload} accept="image/*" className="hidden" />
                     <span className="text-[10px] text-gray-500 mt-1 block text-center uppercase tracking-wider">Upload Logo</span>
@@ -140,9 +140,9 @@ const CompanyProfile = () => {
 
           {/* ═══ STEP 2: BRAND NARRATIVE ═══ */}
           {activeStep === 2 && (
-            <div className="bg-[#131B2B] rounded-2xl border border-white/5 p-8 shadow-xl">
+            <div className="bg-[#131B2B] rounded-2xl border border-white/5 p-5 sm:p-8 shadow-xl">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-white">Brand Narrative</h2>
+                <h2 className="text-lg sm:text-xl font-bold text-white">Brand Narrative</h2>
                 <span className="text-xs text-gray-500">{narrative.length} / 2000 chars</span>
               </div>
               {/* Mini toolbar */}
@@ -161,11 +161,11 @@ const CompanyProfile = () => {
 
           {/* ═══ STEP 3: CULTURE & VALUES ═══ */}
           {activeStep === 3 && (
-            <div className="bg-[#131B2B] rounded-2xl border border-white/5 p-8 shadow-xl">
-              <h2 className="text-xl font-bold text-white mb-6">Culture & Values</h2>
+            <div className="bg-[#131B2B] rounded-2xl border border-white/5 p-5 sm:p-8 shadow-xl">
+              <h2 className="text-lg sm:text-xl font-bold text-white mb-5 sm:mb-6">Culture & Values</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                 {values.map((val, idx) => (
-                  <div key={idx} className="relative bg-gradient-to-br from-[#1A1040] to-[#0D1220] p-5 rounded-xl border border-[#8B7CFF]/10">
+                  <div key={idx} className="relative bg-gradient-to-br from-[#1A1040] to-[#0D1220] p-4 sm:p-5 rounded-xl border border-[#8B7CFF]/10">
                     <button onClick={() => removeValue(idx)} className="absolute top-3 right-3 text-gray-500 hover:text-red-400 transition-colors"><X className="w-4 h-4" /></button>
                     <div className="w-8 h-8 bg-[#8B7CFF]/10 rounded-lg flex items-center justify-center mb-3 border border-[#8B7CFF]/20">
                       <Palette className="w-4 h-4 text-[#8B7CFF]" />
@@ -197,8 +197,8 @@ const CompanyProfile = () => {
 
           {/* ═══ STEP 4: PROFESSIONAL LINKS ═══ */}
           {activeStep === 4 && (
-            <div className="bg-[#131B2B] rounded-2xl border border-white/5 p-8 shadow-xl">
-              <h2 className="text-xl font-bold text-white mb-6">Professional Links</h2>
+            <div className="bg-[#131B2B] rounded-2xl border border-white/5 p-5 sm:p-8 shadow-xl">
+              <h2 className="text-lg sm:text-xl font-bold text-white mb-5 sm:mb-6">Professional Links</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                 <div className="relative">
                   <Globe className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
@@ -220,18 +220,18 @@ const CompanyProfile = () => {
           )}
 
           {/* Save / Continue Buttons */}
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col-reverse sm:flex-row items-center justify-between gap-4">
             <button onClick={() => handleSave(true)} className="text-sm text-gray-400 hover:text-white font-semibold transition-colors">
               {saved ? '✓ Saved' : 'Save Draft'}
             </button>
-            <div className="flex gap-3">
+            <div className="flex gap-3 w-full sm:w-auto">
               {activeStep > 1 && (
-                <button onClick={() => setActiveStep(activeStep - 1)} className="px-5 py-2.5 rounded-xl text-sm font-bold text-gray-300 hover:text-white hover:bg-[#1A2235] border border-white/5 transition-all">
+                <button onClick={() => setActiveStep(activeStep - 1)} className="flex-1 sm:flex-none px-5 py-2.5 rounded-xl text-sm font-bold text-gray-300 hover:text-white hover:bg-[#1A2235] border border-white/5 transition-all">
                   Back
                 </button>
               )}
               <button onClick={() => activeStep < 4 ? setActiveStep(activeStep + 1) : handleSave(false)}
-                className="px-6 py-2.5 bg-[#8B7CFF] hover:bg-[#7a6ce0] text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-[#8B7CFF]/10">
+                className="flex-1 sm:flex-none px-6 py-2.5 bg-[#8B7CFF] hover:bg-[#7a6ce0] text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-[#8B7CFF]/10">
                 {activeStep === 4 ? 'Continue to Review' : 'Next Step'}
               </button>
             </div>
@@ -241,7 +241,7 @@ const CompanyProfile = () => {
         {/* Right Sidebar — Tips + Preview */}
         <div className="space-y-6">
           {/* Editorial Tips */}
-          <div className="bg-[#131B2B] rounded-2xl border border-white/5 p-6 shadow-xl">
+          <div className="bg-[#131B2B] rounded-2xl border border-white/5 p-5 sm:p-6 shadow-xl">
             <h3 className="text-sm font-bold text-white mb-3">✦ Editorial Tips</h3>
             <p className="text-xs text-gray-400 leading-relaxed mb-4">
               Profiles with a distinct <span className="text-white font-semibold">Brand Narrative</span> receive 40% more engagement from premium talent.

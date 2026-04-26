@@ -166,16 +166,38 @@ const ProfileSettings = ({ role }) => {
     <div className="max-w-5xl mx-auto pb-12">
       
       {/* Page Header */}
-      <div className="mb-10">
-        <h1 className="text-4xl font-bold text-white italic tracking-tight mb-3">Account Settings</h1>
+      <div className="mb-6 sm:mb-10">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white italic tracking-tight mb-3">Account Settings</h1>
         <p className="text-gray-400 text-sm max-w-lg leading-relaxed">
           Manage your curated professional identity, security protocols, and discovery preferences within the Internova ecosystem.
         </p>
       </div>
 
+      {/* ─── MOBILE HORIZONTAL TABS ─── */}
+      <div className="lg:hidden flex gap-2 overflow-x-auto pb-4 mb-2 -mx-1 px-1 scrollbar-none">
+        {SECTIONS.map((section) => {
+          const Icon = section.icon;
+          const isActive = activeSection === section.id;
+          return (
+            <button
+              key={section.id}
+              onClick={() => scrollToSection(section.id)}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-medium transition-all whitespace-nowrap shrink-0 ${
+                isActive
+                  ? 'bg-[#8B7CFF] text-white shadow-lg shadow-[#8B7CFF]/20'
+                  : 'text-gray-400 bg-[#131B2B] hover:text-gray-200 border border-white/5'
+              }`}
+            >
+              <Icon className="w-3.5 h-3.5" />
+              {section.label}
+            </button>
+          );
+        })}
+      </div>
+
       <div className="flex gap-8">
 
-        {/* ─── LEFT SIDEBAR NAV ─── */}
+        {/* ─── LEFT SIDEBAR NAV — Desktop ─── */}
         <div className="hidden lg:block w-56 shrink-0">
           <nav className="sticky top-8 space-y-1">
             {SECTIONS.map((section) => {
@@ -200,7 +222,7 @@ const ProfileSettings = ({ role }) => {
         </div>
 
         {/* ─── RIGHT CONTENT AREA ─── */}
-        <div className="flex-1 space-y-8 min-w-0">
+        <div className="flex-1 space-y-6 sm:space-y-8 min-w-0">
 
           {/* ════════════════════════════════════════════════
               SECTION 1: PROFILE SETTINGS
@@ -209,9 +231,9 @@ const ProfileSettings = ({ role }) => {
             <div className="bg-[#131B2B] rounded-2xl border border-white/5 shadow-xl overflow-hidden">
               
               {/* Section Header */}
-              <div className="flex items-center justify-between px-8 pt-8 pb-4">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 px-5 sm:px-8 pt-5 sm:pt-8 pb-4">
                 <h2 className="text-sm font-bold text-gray-300 tracking-widest uppercase">Profile Settings</h2>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 w-full sm:w-auto">
                   {saveSuccess && (
                     <div className="flex items-center text-emerald-400 text-xs font-bold">
                       <CheckCircle2 className="w-4 h-4 mr-1.5" /> Saved
@@ -225,7 +247,7 @@ const ProfileSettings = ({ role }) => {
                   <button
                     onClick={handleSaveAll}
                     disabled={isSaving}
-                    className="flex items-center gap-2 bg-[#8B7CFF] hover:bg-[#7a6ce0] text-white px-5 py-2.5 rounded-xl text-xs font-bold tracking-wide transition-all disabled:opacity-70 shadow-lg shadow-[#8B7CFF]/10"
+                    className="flex items-center gap-2 bg-[#8B7CFF] hover:bg-[#7a6ce0] text-white px-5 py-2.5 rounded-xl text-xs font-bold tracking-wide transition-all disabled:opacity-70 shadow-lg shadow-[#8B7CFF]/10 w-full sm:w-auto justify-center"
                   >
                     <Save className="w-3.5 h-3.5" />
                     {isSaving ? 'Saving...' : 'Save Changes'}
@@ -234,7 +256,7 @@ const ProfileSettings = ({ role }) => {
               </div>
 
               {/* Profile Card: Avatar + Name + Email + Bio */}
-              <div className="px-8 pb-8">
+              <div className="px-5 sm:px-8 pb-5 sm:pb-8">
                 <div className="flex flex-col sm:flex-row gap-6 items-start">
                   
                   {/* Avatar */}
@@ -299,13 +321,13 @@ const ProfileSettings = ({ role }) => {
              ════════════════════════════════════════════════ */}
           <div ref={sectionRefs.security}>
             <div className="bg-[#131B2B] rounded-2xl border border-white/5 shadow-xl overflow-hidden">
-              <div className="px-8 pt-8 pb-4">
+              <div className="px-5 sm:px-8 pt-5 sm:pt-8 pb-4">
                 <h2 className="text-sm font-bold text-gray-300 tracking-widest uppercase">Account Security</h2>
               </div>
 
-              <div className="px-8 pb-8 space-y-4">
+              <div className="px-5 sm:px-8 pb-5 sm:pb-8 space-y-4">
                 {/* Password Control */}
-                <div className="flex items-center justify-between bg-[#06090F] rounded-xl px-5 py-4 border border-white/5">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-[#06090F] rounded-xl px-4 sm:px-5 py-4 border border-white/5">
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 bg-[#1A2235] rounded-xl flex items-center justify-center border border-white/5">
                       <Lock className="w-5 h-5 text-gray-400" />
@@ -335,7 +357,7 @@ const ProfileSettings = ({ role }) => {
                         className="w-full bg-[#131B2B] border border-white/5 rounded-xl px-4 py-3 text-sm text-white focus:border-[#8B7CFF] focus:ring-1 focus:ring-[#8B7CFF] outline-none transition-all"
                       />
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-xs font-bold text-gray-400 mb-2 tracking-widest uppercase">New Password</label>
                         <input
@@ -359,7 +381,7 @@ const ProfileSettings = ({ role }) => {
                 )}
 
                 {/* Two-Factor Authentication */}
-                <div className="flex items-center justify-between bg-gradient-to-r from-[#1A1040] to-[#0D1220] rounded-xl px-5 py-4 border border-[#8B7CFF]/10">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-gradient-to-r from-[#1A1040] to-[#0D1220] rounded-xl px-4 sm:px-5 py-4 border border-[#8B7CFF]/10">
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 bg-[#8B7CFF]/10 rounded-xl flex items-center justify-center border border-[#8B7CFF]/20">
                       <Shield className="w-5 h-5 text-[#8B7CFF]" />
@@ -387,10 +409,10 @@ const ProfileSettings = ({ role }) => {
             
             {/* Notifications */}
             <div className="bg-[#131B2B] rounded-2xl border border-white/5 shadow-xl overflow-hidden">
-              <div className="px-8 pt-8 pb-4">
+              <div className="px-5 sm:px-8 pt-5 sm:pt-8 pb-4">
                 <h2 className="text-sm font-bold text-gray-300 tracking-widest uppercase">Notifications</h2>
               </div>
-              <div className="px-8 pb-8 space-y-5">
+              <div className="px-5 sm:px-8 pb-5 sm:pb-8 space-y-5">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-300 font-medium">Email Alerts</span>
                   <Toggle
@@ -417,10 +439,10 @@ const ProfileSettings = ({ role }) => {
 
             {/* Privacy & Visibility */}
             <div ref={sectionRefs.privacy} className="bg-[#131B2B] rounded-2xl border border-white/5 shadow-xl overflow-hidden">
-              <div className="px-8 pt-8 pb-4">
+              <div className="px-5 sm:px-8 pt-5 sm:pt-8 pb-4">
                 <h2 className="text-sm font-bold text-gray-300 tracking-widest uppercase">Privacy & Visibility</h2>
               </div>
-              <div className="px-8 pb-8 space-y-5">
+              <div className="px-5 sm:px-8 pb-5 sm:pb-8 space-y-5">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-300 font-medium">Profile Visibility</span>
                   <div className="relative">
@@ -451,7 +473,7 @@ const ProfileSettings = ({ role }) => {
               SECTION 5: DELETE ACCOUNT (DANGER ZONE)
              ════════════════════════════════════════════════ */}
           <div className="bg-[#131B2B] rounded-2xl border border-red-500/10 shadow-xl overflow-hidden">
-            <div className="px-8 py-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="px-5 sm:px-8 py-5 sm:py-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
                 <h3 className="text-sm font-bold text-red-400 tracking-wide">Delete Account</h3>
                 <p className="text-xs text-gray-500 mt-1">Once you delete your account, there is no going back. Please be certain.</p>

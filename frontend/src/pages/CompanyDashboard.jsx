@@ -85,22 +85,22 @@ const CompanyDashboard = () => {
   const totalMatches = displayPostings.reduce((sum, p) => sum + (p.matchesCount || 0), 0);
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-8 sm:space-y-10">
       {/* Header section */}
       <div>
         <p className="text-gray-400 tracking-widest text-[10px] font-bold uppercase mb-3">Company Dashboard</p>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
           <div>
-            <h1 className="text-5xl font-bold text-white mb-3 tracking-tight">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-3 tracking-tight">
               Company <span className="text-[#8B7CFF]">Overview</span>
             </h1>
-            <p className="text-gray-400 text-base max-w-2xl leading-relaxed">
+            <p className="text-gray-400 text-sm sm:text-base max-w-2xl leading-relaxed">
               Manage your active internship postings, review top-matched candidates, and track recruitment performance across your pipeline.
             </p>
           </div>
           <button 
             onClick={() => setIsModalOpen(true)}
-            className="hidden sm:flex items-center py-3 px-5 bg-[#8B7CFF] hover:bg-white text-[#131B2B] rounded-xl font-bold text-sm transition-all shadow-lg shadow-[#8B7CFF]/20 gap-2"
+            className="flex items-center py-3 px-5 bg-[#8B7CFF] hover:bg-white text-[#131B2B] rounded-xl font-bold text-sm transition-all shadow-lg shadow-[#8B7CFF]/20 gap-2 w-full sm:w-auto justify-center"
           >
             <FilePlus className="w-4 h-4" />
             Create New Posting
@@ -109,47 +109,47 @@ const CompanyDashboard = () => {
       </div>
 
       {/* Stats Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-[#131B2B] p-6 rounded-2xl border border-white/5 shadow-xl border-l-4 border-l-[#8B7CFF]">
-          <div className="flex items-center justify-between mb-3">
-            <p className="text-gray-400 font-semibold tracking-wider text-xs uppercase">Active Postings</p>
-            <Briefcase className="w-5 h-5 text-[#8B7CFF]" />
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div className="bg-[#131B2B] p-4 sm:p-6 rounded-2xl border border-white/5 shadow-xl border-l-4 border-l-[#8B7CFF]">
+          <div className="flex items-center justify-between mb-2 sm:mb-3">
+            <p className="text-gray-400 font-semibold tracking-wider text-[10px] sm:text-xs uppercase">Active Postings</p>
+            <Briefcase className="w-4 sm:w-5 h-4 sm:h-5 text-[#8B7CFF]" />
           </div>
-          <div className="text-4xl font-bold text-white">{activeCount}</div>
-          <p className="text-xs text-gray-500 mt-1">Currently recruiting</p>
+          <div className="text-2xl sm:text-4xl font-bold text-white">{activeCount}</div>
+          <p className="text-[10px] sm:text-xs text-gray-500 mt-1">Currently recruiting</p>
         </div>
-        <div className="bg-[#131B2B] p-6 rounded-2xl border border-white/5 shadow-xl border-l-4 border-l-emerald-500">
-          <div className="flex items-center justify-between mb-3">
-            <p className="text-gray-400 font-semibold tracking-wider text-xs uppercase">Total Applicants</p>
-            <Users className="w-5 h-5 text-emerald-400" />
+        <div className="bg-[#131B2B] p-4 sm:p-6 rounded-2xl border border-white/5 shadow-xl border-l-4 border-l-emerald-500">
+          <div className="flex items-center justify-between mb-2 sm:mb-3">
+            <p className="text-gray-400 font-semibold tracking-wider text-[10px] sm:text-xs uppercase">Total Applicants</p>
+            <Users className="w-4 sm:w-5 h-4 sm:h-5 text-emerald-400" />
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-4xl font-bold text-white">{totalApplicants}</span>
-            <span className="text-xs text-emerald-400 flex items-center font-medium">
+            <span className="text-2xl sm:text-4xl font-bold text-white">{totalApplicants}</span>
+            <span className="text-[10px] sm:text-xs text-emerald-400 flex items-center font-medium">
               <TrendingUp className="w-3 h-3 mr-1" /> +12
             </span>
           </div>
-          <p className="text-xs text-gray-500 mt-1">Across all postings</p>
+          <p className="text-[10px] sm:text-xs text-gray-500 mt-1">Across all postings</p>
         </div>
-        <div className="bg-[#131B2B] p-6 rounded-2xl border border-white/5 shadow-xl border-l-4 border-l-pink-500">
-          <div className="flex items-center justify-between mb-3">
-            <p className="text-gray-400 font-semibold tracking-wider text-xs uppercase">High Matches (&gt;90%)</p>
-            <CheckCircle className="w-5 h-5 text-pink-500" />
+        <div className="bg-[#131B2B] p-4 sm:p-6 rounded-2xl border border-white/5 shadow-xl border-l-4 border-l-pink-500">
+          <div className="flex items-center justify-between mb-2 sm:mb-3">
+            <p className="text-gray-400 font-semibold tracking-wider text-[10px] sm:text-xs uppercase">High Matches (&gt;90%)</p>
+            <CheckCircle className="w-4 sm:w-5 h-4 sm:h-5 text-pink-500" />
           </div>
-          <div className="text-4xl font-bold text-[#8B7CFF]">{totalMatches}</div>
-          <p className="text-xs text-gray-500 mt-1">Premium candidates</p>
+          <div className="text-2xl sm:text-4xl font-bold text-[#8B7CFF]">{totalMatches}</div>
+          <p className="text-[10px] sm:text-xs text-gray-500 mt-1">Premium candidates</p>
         </div>
-        <div className="bg-[#131B2B] p-6 rounded-2xl border border-white/5 shadow-xl border-l-4 border-l-amber-500">
-          <div className="flex items-center justify-between mb-3">
-            <p className="text-gray-400 font-semibold tracking-wider text-xs uppercase">Profile Views</p>
-            <Eye className="w-5 h-5 text-amber-400" />
+        <div className="bg-[#131B2B] p-4 sm:p-6 rounded-2xl border border-white/5 shadow-xl border-l-4 border-l-amber-500">
+          <div className="flex items-center justify-between mb-2 sm:mb-3">
+            <p className="text-gray-400 font-semibold tracking-wider text-[10px] sm:text-xs uppercase">Profile Views</p>
+            <Eye className="w-4 sm:w-5 h-4 sm:h-5 text-amber-400" />
           </div>
-          <div className="text-4xl font-bold text-white">892</div>
-          <p className="text-xs text-gray-500 mt-1">This month</p>
+          <div className="text-2xl sm:text-4xl font-bold text-white">892</div>
+          <p className="text-[10px] sm:text-xs text-gray-500 mt-1">This month</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-8">
         
         {/* Left Column — Active Postings */}
         <div className="xl:col-span-2 space-y-8">
@@ -157,7 +157,7 @@ const CompanyDashboard = () => {
           {/* Active Postings */}
           <div>
             <div className="flex items-center justify-between mb-5">
-              <h2 className="text-2xl font-bold text-white">Your Active Postings</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-white">Your Active Postings</h2>
               <button className="text-sm text-[#8B7CFF] font-semibold hover:text-white transition-colors flex items-center gap-1">
                 View All <ArrowUpRight className="w-4 h-4" />
               </button>
@@ -165,29 +165,29 @@ const CompanyDashboard = () => {
             
             <div className="space-y-4">
               {displayPostings.map((post) => (
-                <div key={post._id} className="bg-[#131B2B] p-6 rounded-2xl border border-white/5 hover:border-[#8B7CFF]/30 transition-all duration-300 cursor-pointer group shadow-xl">
+                <div key={post._id} className="bg-[#131B2B] p-4 sm:p-6 rounded-2xl border border-white/5 hover:border-[#8B7CFF]/30 transition-all duration-300 cursor-pointer group shadow-xl">
                   <div className="flex flex-col sm:flex-row justify-between gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h3 className="font-bold text-white text-lg group-hover:text-[#8B7CFF] transition-colors">{post.title}</h3>
-                        <span className={`text-[10px] uppercase font-bold px-2.5 py-1 rounded-full ${post.isActive !== false ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-gray-500/10 text-gray-400 border border-gray-500/20'}`}>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
+                        <h3 className="font-bold text-white text-base sm:text-lg group-hover:text-[#8B7CFF] transition-colors">{post.title}</h3>
+                        <span className={`text-[10px] uppercase font-bold px-2.5 py-1 rounded-full shrink-0 ${post.isActive !== false ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-gray-500/10 text-gray-400 border border-gray-500/20'}`}>
                           {post.isActive !== false ? 'Active' : 'Closed'}
                         </span>
                       </div>
-                      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-400">
+                      <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs sm:text-sm text-gray-400">
                         <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" /> {post.location}</span>
                         <span className="flex items-center gap-1"><Briefcase className="w-3.5 h-3.5" /> {post.type}</span>
                         {post.deadline && <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" /> Due {new Date(post.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>}
                       </div>
                     </div>
                     
-                    <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-4 sm:gap-6">
                       <div className="text-center">
-                        <div className="text-white font-bold text-xl">{post.applicantsCount || 0}</div>
+                        <div className="text-white font-bold text-lg sm:text-xl">{post.applicantsCount || 0}</div>
                         <div className="text-gray-500 text-[10px] font-bold uppercase tracking-wider">Applicants</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-[#8B7CFF] font-bold text-xl">{post.matchesCount || 0}</div>
+                        <div className="text-[#8B7CFF] font-bold text-lg sm:text-xl">{post.matchesCount || 0}</div>
                         <div className="text-gray-500 text-[10px] font-bold uppercase tracking-wider">Matches</div>
                       </div>
                       <ChevronRight className="w-5 h-5 text-gray-600 group-hover:text-[#8B7CFF] transition-colors hidden sm:block" />
@@ -201,7 +201,7 @@ const CompanyDashboard = () => {
           {/* Top Matched Candidates */}
           <div>
             <div className="flex items-center justify-between mb-5">
-              <h2 className="text-2xl font-bold text-white">Top Candidate Matches</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-white">Top Candidate Matches</h2>
               <button className="text-sm text-[#8B7CFF] font-semibold hover:text-white transition-colors flex items-center gap-1">
                 View All <ArrowUpRight className="w-4 h-4" />
               </button>
@@ -210,22 +210,22 @@ const CompanyDashboard = () => {
             <div className="bg-[#131B2B] rounded-2xl border border-white/5 shadow-xl overflow-hidden">
               <div className="divide-y divide-white/5">
                 {SAMPLE_CANDIDATES.map((candidate, idx) => (
-                  <div key={idx} className="p-5 hover:bg-[#1A2235] transition-colors flex items-center justify-between cursor-pointer group">
-                    <div className="flex items-center gap-4">
-                      <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#8B7CFF] to-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-[#8B7CFF]/20">
+                  <div key={idx} className="p-4 sm:p-5 hover:bg-[#1A2235] transition-colors flex flex-col sm:flex-row sm:items-center justify-between cursor-pointer group gap-3">
+                    <div className="flex items-center gap-3 sm:gap-4">
+                      <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-gradient-to-br from-[#8B7CFF] to-indigo-600 flex items-center justify-center text-white font-bold text-xs sm:text-sm shadow-lg shadow-[#8B7CFF]/20 shrink-0">
                         {candidate.avatar}
                       </div>
                       <div>
-                        <h3 className="font-bold text-white group-hover:text-[#8B7CFF] transition-colors">{candidate.name}</h3>
+                        <h3 className="font-bold text-white group-hover:text-[#8B7CFF] transition-colors text-sm sm:text-base">{candidate.name}</h3>
                         <p className="text-gray-500 text-xs">{candidate.role} • {candidate.university}</p>
                       </div>
                     </div>
                     
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-3 sm:gap-4 ml-13 sm:ml-0">
                       <div className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1.5 rounded-full text-xs font-bold">
                         {candidate.score} Match
                       </div>
-                      <div className="flex gap-1.5 hidden sm:flex">
+                      <div className="hidden sm:flex gap-1.5">
                          {candidate.skills.map(s => (
                            <span key={s} className="bg-white/5 border border-white/5 text-gray-400 px-2.5 py-1 rounded-lg text-[10px] font-medium">
                              {s}
@@ -250,7 +250,7 @@ const CompanyDashboard = () => {
         <div className="space-y-6">
 
           {/* Recruitment Pipeline Summary */}
-          <div className="bg-[#131B2B] rounded-2xl border border-white/5 p-6 shadow-xl">
+          <div className="bg-[#131B2B] rounded-2xl border border-white/5 p-5 sm:p-6 shadow-xl">
             <div className="flex items-center gap-2 mb-6">
               <BarChart3 className="w-5 h-5 text-[#8B7CFF]" />
               <h3 className="text-sm font-bold text-white uppercase tracking-wider">Pipeline Summary</h3>
@@ -276,7 +276,7 @@ const CompanyDashboard = () => {
           </div>
 
           {/* Recent Activity Feed */}
-          <div className="bg-[#131B2B] rounded-2xl border border-white/5 p-6 shadow-xl">
+          <div className="bg-[#131B2B] rounded-2xl border border-white/5 p-5 sm:p-6 shadow-xl">
             <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-5">Recent Activity</h3>
             <div className="space-y-4">
               {RECENT_ACTIVITY.map((activity, idx) => (
@@ -287,7 +287,7 @@ const CompanyDashboard = () => {
                     activity.type === 'shortlist' ? 'bg-emerald-400' : 'bg-pink-400'
                   }`}></div>
                   <div>
-                    <p className="text-sm text-gray-300 leading-relaxed">{activity.text}</p>
+                    <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">{activity.text}</p>
                     <p className="text-[10px] text-gray-500 mt-0.5 uppercase tracking-wider font-bold">{activity.time}</p>
                   </div>
                 </div>
@@ -296,7 +296,7 @@ const CompanyDashboard = () => {
           </div>
 
           {/* Upgrade Promo */}
-          <div className="relative p-6 rounded-2xl border border-white/5 shadow-xl overflow-hidden bg-gradient-to-br from-[#1A2342] to-[#131B2B]">
+          <div className="relative p-5 sm:p-6 rounded-2xl border border-white/5 shadow-xl overflow-hidden bg-gradient-to-br from-[#1A2342] to-[#131B2B]">
             <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPgo8cmVjdCB3aWR0aD0iOCIgaGVpZ2h0PSI4IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDEiLz4KPHBhdGggZD0iTTAgMGg4djhIMHoiIGZpbGw9Im5vbmUiLz4KPC9zdmc+')] opacity-20"></div>
             <div className="relative z-10">
               <h3 className="text-xl font-bold text-white mb-2 leading-tight">Boost Your<br/>Visibility</h3>
@@ -314,14 +314,14 @@ const CompanyDashboard = () => {
       {/* Create Posting Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-[#131B2B] rounded-2xl border border-white/10 shadow-2xl w-full max-w-lg overflow-hidden">
-            <div className="flex justify-between items-center p-6 border-b border-white/5">
-              <h2 className="text-xl font-bold text-white">Create New Posting</h2>
+          <div className="bg-[#131B2B] rounded-2xl border border-white/10 shadow-2xl w-full max-w-lg overflow-hidden max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center p-4 sm:p-6 border-b border-white/5">
+              <h2 className="text-lg sm:text-xl font-bold text-white">Create New Posting</h2>
               <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-white transition-colors">
                 <X className="w-6 h-6" />
               </button>
             </div>
-            <form onSubmit={handleCreatePosting} className="p-6 space-y-4">
+            <form onSubmit={handleCreatePosting} className="p-4 sm:p-6 space-y-4">
               <div>
                 <label className="block text-sm font-bold text-gray-300 mb-1">Internship Title</label>
                 <input 
@@ -357,7 +357,7 @@ const CompanyDashboard = () => {
                   placeholder="Briefly describe the role..."
                 ></textarea>
               </div>
-              <div className="pt-4 flex justify-end gap-3">
+              <div className="pt-4 flex flex-col-reverse sm:flex-row justify-end gap-3">
                 <button type="button" onClick={() => setIsModalOpen(false)} className="px-5 py-2.5 rounded-xl font-bold text-gray-300 hover:text-white hover:bg-white/5 transition-colors">
                   Cancel
                 </button>
