@@ -68,3 +68,7 @@ The frontend was completely overhauled from the default React boilerplate to fea
 2. Run `npm run install-all` to install all dependencies across the root, frontend, and backend.
 3. Run `npm run dev` to start the entire application.
 4. Navigate to `http://localhost:5173` in your browser to view the application.
+
+
+
+commit checking
