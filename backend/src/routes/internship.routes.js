@@ -1,24 +1,19 @@
-const express = require('express');
-const {
+import express from "express";
+import {
   createInternship,
   getInternships,
   getInternshipById,
   deleteInternship,
   getMyInternships,
-} = require('../controllers/internship.controller');
-const { protect, authorize } = require('../middleware/auth.middleware');
+} from "../controllers/internship.controller.js";
+import { protect } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-// Public routes
-router.get('/', getInternships);
+router.post("/", protect, createInternship);
+router.get("/", getInternships);
+router.get("/my", protect, getMyInternships);
+router.get("/:id", getInternshipById);
+router.delete("/:id", protect, deleteInternship);
 
-// Private routes (must be before /:id to avoid conflict)
-router.get('/my', protect, authorize('company'), getMyInternships);
-router.post('/', protect, authorize('company'), createInternship);
-
-// Parameterized routes
-router.get('/:id', getInternshipById);
-router.delete('/:id', protect, authorize('company'), deleteInternship);
-
-module.exports = router;
+export default router;

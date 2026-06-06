@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const internshipSchema = new mongoose.Schema(
   {
@@ -15,19 +15,19 @@ const internshipSchema = new mongoose.Schema(
 
     company: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
     },
 
     location: {
       type: String,
-      default: 'Remote',
+      default: "Remote",
     },
 
     type: {
       type: String,
-      enum: ['remote', 'onsite', 'hybrid'],
-      default: 'onsite',
+      enum: ["remote", "onsite", "hybrid"],
+      default: "onsite",
     },
 
     requiredSkills: [String],
@@ -38,7 +38,7 @@ const internshipSchema = new mongoose.Schema(
     },
 
     duration: {
-      type: String, // e.g. "3 months"
+      type: String,
     },
 
     deadline: {
@@ -60,11 +60,11 @@ const internshipSchema = new mongoose.Schema(
   }
 );
 
-// Virtual population for applications
-internshipSchema.virtual('applications', {
-  ref: 'Application',
-  localField: '_id',
-  foreignField: 'internship',
+// Virtual for applications (relational querying)
+internshipSchema.virtual("applications", {
+  ref: "Application",
+  localField: "_id",
+  foreignField: "internship",
 });
 
-module.exports = mongoose.model('Internship', internshipSchema);
+export default mongoose.model("Internship", internshipSchema);

@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const profileSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
       unique: true,
     },
@@ -22,8 +22,8 @@ const profileSchema = new mongoose.Schema(
         name: String,
         level: {
           type: String,
-          enum: ['beginner', 'intermediate', 'advanced'],
-          default: 'beginner',
+          enum: ["beginner", "intermediate", "advanced"],
+          default: "beginner",
         },
       },
     ],
@@ -52,4 +52,4 @@ const profileSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model('Profile', profileSchema);
+export default mongoose.model("Profile", profileSchema);
