@@ -1,137 +1,106 @@
-const Internship = require('../models/Internship');
+// ──────────────────────────────────────────
+// Internship Controller — Sumaiya's task
+// ──────────────────────────────────────────
 
-// @desc    Create internship
-// @route   POST /api/internships
-// @access  Private (company only)
-exports.createInternship = async (req, res) => {
+import Internship from "../models/Internship.js";
+import { isValidObjectId } from "../utils/validators.js";
+
+// POST /api/internships  — company only
+export const createInternship = async (req, res) => {
   try {
-    const { title, description, location, type, requiredSkills, stipend, duration, deadline } =
-      req.body;
+    if (req.user.role !== "company") {
+      return res.status(403).json({ success: false, message: "Only companies can post internships." });
+    }
+
+    const { title, description, location, type, requiredSkills, stipend, duration, deadline } = req.body;
+
+    if (!title || !description) {
+      return res.status(400).json({ success: false, message: "Title and description are required." });
+    }
 
     const internship = await Internship.create({
-      title,
-      description,
-      company: req.user.id, // Logged-in company user
-      location,
-      type,
-      requiredSkills,
-      stipend,
-      duration,
-      deadline,
+      title, description, location, type,
+      requiredSkills, stipend, duration, deadline,
+      company: req.user._id,
     });
 
-    res.status(201).json({
-      success: true,
-      data: internship,
-    });
+    res.status(201).json({ success: true, message: "Internship created.", data: { internship } });
   } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
-// @desc    Get all internships (with optional filters)
-// @route   GET /api/internships?location=X&type=Y
-// @access  Public
-exports.getInternships = async (req, res) => {
+// GET /api/internships  — public
+export const getInternships = async (req, res) => {
   try {
-    const query = { isActive: true };
+    const filter = { isActive: true };
+    if (req.query.location) filter.location = new RegExp(req.query.location, "i");
+    if (req.query.type) filter.type = req.query.type;
 
-    // Optional query filters
-    if (req.query.location) {
-      query.location = { $regex: req.query.location, $options: 'i' };
-    }
-    if (req.query.type) {
-      query.type = req.query.type;
-    }
+    const internships = await Internship.find(filter)
+      .populate("company", "name email")
+      .sort({ createdAt: -1 })
+      .limit(50);
 
-    const internships = await Internship.find(query)
-      .populate('company', 'name email')
-      .sort({ createdAt: -1 });
-
-    res.status(200).json({
-      success: true,
-      count: internships.length,
-      data: internships,
-    });
+    res.status(200).json({ success: true, data: { internships } });
   } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
-// @desc    Get single internship by ID
-// @route   GET /api/internships/:id
-// @access  Public
-exports.getInternshipById = async (req, res) => {
+// GET /api/internships/my  — company only
+export const getMyInternships = async (req, res) => {
   try {
-    const internship = await Internship.findById(req.params.id).populate(
-      'company',
-      'name email'
-    );
+    if (req.user.role !== "company") {
+      return res.status(403).json({ success: false, message: "Only companies can access this." });
+    }
+
+    const internships = await Internship.find({ company: req.user._id }).sort({ createdAt: -1 });
+    res.status(200).json({ success: true, data: { internships } });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// GET /api/internships/:id  — public
+export const getInternshipById = async (req, res) => {
+  try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ success: false, message: "Invalid internship ID." });
+    }
+
+    const internship = await Internship.findById(req.params.id).populate("company", "name email");
 
     if (!internship) {
-      return res.status(404).json({
-        success: false,
-        message: 'Internship not found',
-      });
+      return res.status(404).json({ success: false, message: "Internship not found." });
     }
 
-    res.status(200).json({
-      success: true,
-      data: internship,
-    });
+    res.status(200).json({ success: true, data: { internship } });
   } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
-// @desc    Delete internship
-// @route   DELETE /api/internships/:id
-// @access  Private (owner company only)
-exports.deleteInternship = async (req, res) => {
+// DELETE /api/internships/:id  — owner only
+export const deleteInternship = async (req, res) => {
   try {
+    if (!isValidObjectId(req.params.id)) {
+      return res.status(400).json({ success: false, message: "Invalid internship ID." });
+    }
+
     const internship = await Internship.findById(req.params.id);
 
     if (!internship) {
-      return res.status(404).json({
-        success: false,
-        message: 'Internship not found',
-      });
+      return res.status(404).json({ success: false, message: "Internship not found." });
     }
 
-    // Ensure only the company that created it can delete
-    if (internship.company.toString() !== req.user.id) {
-      return res.status(403).json({
-        success: false,
-        message: 'Not authorized to delete this internship',
-      });
+    if (internship.company.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ success: false, message: "Not authorized to delete this internship." });
     }
 
-    await Internship.findByIdAndDelete(req.params.id);
-
-    res.status(200).json({
-      success: true,
-      message: 'Internship deleted successfully',
-    });
+    await internship.deleteOne();
+    res.status(200).json({ success: true, message: "Internship deleted." });
   } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
-  }
-};
-
-// @desc    Get my internships (posted by logged-in company)
-// @route   GET /api/internships/my
-// @access  Private (company only)
-exports.getMyInternships = async (req, res) => {
-  try {
-    const internships = await Internship.find({ company: req.user.id }).sort({
-      createdAt: -1,
-    });
-
-    res.status(200).json({
-      success: true,
-      count: internships.length,
-      data: internships,
-    });
-  } catch (error) {
-    res.status(400).json({ success: false, message: error.message });
+    res.status(500).json({ success: false, message: error.message });
   }
 };

@@ -1,23 +1,23 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const applicationSchema = new mongoose.Schema(
   {
     student: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
     },
 
     internship: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Internship',
+      ref: "Internship",
       required: true,
     },
 
     status: {
       type: String,
-      enum: ['applied', 'reviewed', 'interview', 'accepted', 'rejected'],
-      default: 'applied',
+      enum: ["applied", "reviewed", "interview", "accepted", "rejected"],
+      default: "applied",
     },
 
     matchScore: {
@@ -37,4 +37,4 @@ const applicationSchema = new mongoose.Schema(
 // Prevent duplicate applications
 applicationSchema.index({ student: 1, internship: 1 }, { unique: true });
 
-module.exports = mongoose.model('Application', applicationSchema);
+export default mongoose.model("Application", applicationSchema);
