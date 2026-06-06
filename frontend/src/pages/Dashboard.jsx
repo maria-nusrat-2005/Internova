@@ -4,6 +4,7 @@ import DashboardLayout from '../components/DashboardLayout';
 import StudentDashboard from './StudentDashboard';
 import CompanyDashboard from './CompanyDashboard';
 import ProfileSettings from './ProfileSettings';
+import CompanyProfile from './CompanyProfile';
 
 const Dashboard = () => {
   const [role, setRole] = useState(null);
@@ -29,9 +30,10 @@ const Dashboard = () => {
     <DashboardLayout role={role}>
       <Routes>
         <Route path="/" element={role === 'student' ? <StudentDashboard /> : <CompanyDashboard />} />
-        <Route path="/profile" element={<ProfileSettings role={role} />} />
+        <Route path="/profile" element={role === 'company' ? <CompanyProfile /> : <ProfileSettings role={role} />} />
         {/* Placeholder for Discovery route */}
         <Route path="/discovery" element={<div className="text-white">Discovery content coming soon...</div>} />
+        <Route path="/insights" element={<div className="text-white">Insights & Analytics coming soon...</div>} />
         <Route path="*" element={<Navigate to="" replace />} />
       </Routes>
     </DashboardLayout>

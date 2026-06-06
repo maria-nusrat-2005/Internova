@@ -9,13 +9,14 @@ const AuthLayout = ({ children }) => {
   return (
     <div className="min-h-screen flex flex-col bg-[#0B0F19] text-white font-sans selection:bg-[#8B7CFF] selection:text-white">
       {/* Header */}
-      <header className="w-full flex items-center justify-between px-8 py-6 max-w-7xl mx-auto">
-        <div className="text-xl font-bold tracking-tight">Internova</div>
-        <div className="text-sm text-gray-400 font-medium">
-          {isLogin ? 'NEW TO THE PLATFORM?' : 'ALREADY HAVE AN ACCOUNT?'}{' '}
+      <header className="w-full flex items-center justify-between px-4 sm:px-8 py-4 sm:py-6 max-w-7xl mx-auto">
+        <div className="text-lg sm:text-xl font-bold tracking-tight">Internova</div>
+        <div className="text-xs sm:text-sm text-gray-400 font-medium">
+          <span className="hidden sm:inline">{isLogin ? 'NEW TO THE PLATFORM?' : 'ALREADY HAVE AN ACCOUNT?'}</span>
+          <span className="sm:hidden">{isLogin ? 'NEW HERE?' : 'HAVE ACCOUNT?'}</span>{' '}
           <Link 
             to={isLogin ? '/register' : '/login'} 
-            className="text-white hover:text-[#8B7CFF] ml-2 transition-colors"
+            className="text-white hover:text-[#8B7CFF] ml-1 sm:ml-2 transition-colors"
           >
             {isLogin ? 'Sign Up' : 'Sign In'}
           </Link>
@@ -23,7 +24,7 @@ const AuthLayout = ({ children }) => {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 flex items-center justify-center w-full max-w-7xl mx-auto px-8 py-12 gap-16 lg:gap-24">
+      <main className="flex-1 flex items-center justify-center w-full max-w-7xl mx-auto px-4 sm:px-8 py-8 sm:py-12 gap-8 lg:gap-24">
         
         {/* Left Side: Copy & Features */}
         <div className="hidden lg:flex flex-col w-1/2 pr-8">
@@ -61,7 +62,7 @@ const AuthLayout = ({ children }) => {
 
         {/* Right Side: Form Container */}
         <div className="w-full lg:w-1/2 flex justify-center lg:justify-end">
-          <div className="bg-[#131B2B] p-10 rounded-2xl border border-white/5 w-full max-w-md shadow-2xl relative">
+          <div className="bg-[#131B2B] p-6 sm:p-10 rounded-2xl border border-white/5 w-full max-w-md shadow-2xl relative">
             <div className="absolute -top-10 -right-10 w-40 h-40 bg-[#8B7CFF] rounded-full blur-[100px] opacity-10 pointer-events-none"></div>
             {children}
           </div>
@@ -69,13 +70,13 @@ const AuthLayout = ({ children }) => {
       </main>
 
       {/* Footer */}
-      <footer className="w-full bg-[#05070A] py-8 px-8 mt-auto">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between text-xs text-gray-500 font-medium">
-          <div className="flex flex-col mb-4 md:mb-0">
+      <footer className="w-full bg-[#05070A] py-6 sm:py-8 px-4 sm:px-8 mt-auto">
+        <div className="max-w-7xl mx-auto flex flex-col items-center gap-4 md:flex-row md:justify-between text-xs text-gray-500 font-medium">
+          <div className="flex flex-col items-center md:items-start mb-0">
             <span className="text-white text-sm font-bold mb-1">Internova</span>
             <span>© 2026 INTERNOVA.</span>
           </div>
-          <div className="flex gap-8">
+          <div className="flex flex-wrap justify-center gap-4 sm:gap-8">
             <a href="#" className="hover:text-white transition-colors">PRIVACY</a>
             <a href="#" className="hover:text-white transition-colors">TERMS</a>
             <a href="#" className="hover:text-white transition-colors">GUIDELINES</a>

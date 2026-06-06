@@ -20,7 +20,7 @@
     "url": "https://github.com/maria-nusrat-2005/Internova/issues"
   },
   "homepage": "https://github.com/maria-nusrat-2005/Internova#readme",
-  "dependencies": {
+  "devDependencies": {
     "concurrently": "^9.2.1"
   }
 }
