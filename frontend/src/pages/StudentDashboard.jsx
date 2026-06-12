@@ -1,176 +1,116 @@
-import React from 'react';
-import { Activity, AlertCircle, ChevronRight, ChevronLeft } from 'lucide-react';
+import { useAppSelector } from "../../app/hooks.js";
+import { useDispatch } from "react-redux";
+import { logout } from "../../features/auth/authSlice.js";
+import { useNavigate, Link } from "react-router-dom";
 
-const StudentDashboard = () => {
+export default function StudentDashboard() {
+  const { user } = useAppSelector((s) => s.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
+
+  const stats = [
+    { icon: "💼", number: "12", label: "Matched Internships" },
+    { icon: "📨", number: "3",  label: "Applications Sent" },
+    { icon: "⭐", number: "94%", label: "Profile Match Score" },
+    { icon: "🔖", number: "5",  label: "Bookmarked" },
+  ];
+
+  const mockInternships = [
+    { id: 1, title: "Frontend Developer Intern", company: "TechCorp BD", location: "Dhaka", type: "onsite", stipend: 8000, match: 95, skills: ["React", "Tailwind"] },
+    { id: 2, title: "Backend Developer Intern", company: "StartupX", location: "Remote", type: "remote", stipend: 6000, match: 87, skills: ["Node.js", "MongoDB"] },
+    { id: 3, title: "UI/UX Design Intern",      company: "DesignHub", location: "Dhaka", type: "hybrid", stipend: 5000, match: 72, skills: ["Figma", "CSS"] },
+  ];
+
+  const matchColor = (score) => {
+    if (score >= 90) return "text-emerald-400 bg-emerald-400/10";
+    if (score >= 70) return "text-yellow-400 bg-yellow-400/10";
+    return "text-red-400 bg-red-400/10";
+  };
+
+  const matchDot = (score) => {
+    if (score >= 90) return "🟢";
+    if (score >= 70) return "🟡";
+    return "🔴";
+  };
+
   return (
-    <div className="space-y-8 sm:space-y-12">
-      {/* Header section */}
-      <div>
-        <p className="text-gray-400 tracking-widest text-[10px] font-bold uppercase mb-3">Student Dashboard</p>
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 tracking-tight">
-          Welcome back, <span className="text-[#8B7CFF]">Maria!</span>
-        </h1>
-        <p className="text-gray-400 text-sm sm:text-base max-w-2xl leading-relaxed">
-          Your career portfolio is evolving. We've curated new matches based on your recent activity and identified key pathways for growth.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-8">
-        
-        {/* Left Column (Main Content) */}
-        <div className="xl:col-span-2 space-y-8 sm:space-y-10">
-          
-          {/* Application Activity Card */}
-          <div className="bg-[#131B2B] p-5 sm:p-8 rounded-2xl border border-white/5 shadow-xl">
-            <div className="flex justify-between items-start mb-6 sm:mb-8">
-              <div>
-                <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">Application Activity</h2>
-                <p className="text-gray-400 text-sm">Tracking your current visionary trajectory.</p>
-              </div>
-              <Activity className="w-6 h-6 text-[#8B7CFF]" />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="bg-[#06090F] p-5 sm:p-6 rounded-xl border border-white/5 border-l-4 border-l-[#8B7CFF]">
-                <div className="text-3xl sm:text-4xl font-bold text-[#8B7CFF] mb-2">12</div>
-                <div className="text-xs font-bold text-gray-500 tracking-widest uppercase">Applied</div>
-              </div>
-              <div className="bg-[#06090F] p-5 sm:p-6 rounded-xl border border-white/5 border-l-4 border-l-white">
-                <div className="text-3xl sm:text-4xl font-bold text-white mb-2">04</div>
-                <div className="text-xs font-bold text-gray-500 tracking-widest uppercase">In Progress</div>
-              </div>
-              <div className="bg-[#06090F] p-5 sm:p-6 rounded-xl border border-white/5 border-l-4 border-l-pink-500">
-                <div className="text-3xl sm:text-4xl font-bold text-pink-500 mb-2">02</div>
-                <div className="text-xs font-bold text-gray-500 tracking-widest uppercase">Interviewing</div>
-              </div>
-            </div>
+    <div className="min-h-screen bg-[#0a0e1a]">
+      {/* Topbar */}
+      <header className="h-16 bg-[#111827] border-b border-white/8 flex items-center justify-between px-6">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center">🚀</div>
+          <span className="font-display text-xl font-bold">Inter<span className="text-blue-400">nova</span></span>
+        </div>
+        <div className="flex items-center gap-3">
+          <Link to="/profile" className="text-sm text-slate-400 hover:text-white transition-colors">Profile</Link>
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center text-xs font-bold">
+            {user?.name?.[0]?.toUpperCase() || "U"}
           </div>
+          <span className="text-sm text-slate-300 hidden sm:block">{user?.name}</span>
+          <button
+            onClick={handleLogout}
+            className="text-xs text-slate-500 hover:text-red-400 border border-white/10 hover:border-red-400/30 px-3 py-1.5 rounded-lg transition-all"
+          >
+            Sign Out
+          </button>
+        </div>
+      </header>
 
-          {/* Top Match Opportunities */}
-          <div>
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-6 gap-4">
-              <h2 className="text-xl sm:text-2xl font-bold text-white">Top Match Opportunities</h2>
-              <button className="text-sm font-semibold text-[#8B7CFF] hover:text-white transition-colors">
-                View All Matches
-              </button>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-              {/* Card 1 */}
-              <div className="bg-[#131B2B] rounded-2xl border border-white/5 shadow-xl overflow-hidden group cursor-pointer hover:border-[#8B7CFF]/50 transition-colors flex flex-col">
-                {/* Image Placeholder / Gradient */}
-                <div className="h-32 sm:h-40 w-full bg-gradient-to-br from-slate-800 to-[#1A2342] relative overflow-hidden flex-shrink-0">
-                  <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
-                  <div className="absolute top-4 right-4 bg-[#8B7CFF] text-[#131B2B] text-[10px] font-bold px-3 py-1.5 rounded-full shadow-lg z-10">
-                    92% MATCH
-                  </div>
-                </div>
-                {/* Content Area */}
-                <div className="p-5 sm:p-6 flex-1 flex flex-col justify-end bg-[#131B2B]">
-                  <h3 className="text-lg sm:text-xl font-bold text-white mb-1">Senior UX Designer</h3>
-                  <p className="text-sm text-gray-400 mb-4 sm:mb-5">Lumina Digital Arts • Remote</p>
-                  <div className="flex flex-wrap gap-2 mt-auto">
-                    <span className="bg-[#1A2235] border border-white/5 text-[10px] font-bold tracking-wider text-gray-300 px-3 py-1.5 rounded uppercase">Figma</span>
-                    <span className="bg-[#1A2235] border border-white/5 text-[10px] font-bold tracking-wider text-gray-300 px-3 py-1.5 rounded uppercase">Prototyping</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Card 2 */}
-              <div className="bg-[#131B2B] rounded-2xl border border-white/5 shadow-xl overflow-hidden group cursor-pointer hover:border-[#8B7CFF]/50 transition-colors flex flex-col">
-                {/* Image Placeholder / Gradient */}
-                <div className="h-32 sm:h-40 w-full bg-gradient-to-br from-gray-800 to-[#0B0F19] relative overflow-hidden flex-shrink-0">
-                   <div className="absolute inset-0 opacity-10 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.2)_50%,transparent_75%,transparent_100%)] bg-[length:20px_20px]"></div>
-                  <div className="absolute top-4 right-4 bg-gray-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-full shadow-lg z-10">
-                    85% MATCH
-                  </div>
-                </div>
-                {/* Content Area */}
-                <div className="p-5 sm:p-6 flex-1 flex flex-col justify-end bg-[#131B2B]">
-                  <h3 className="text-lg sm:text-xl font-bold text-white mb-1">Product Architect</h3>
-                  <p className="text-sm text-gray-400 mb-4 sm:mb-5">Vertex Solutions • Hybrid</p>
-                  <div className="flex flex-wrap gap-2 mt-auto">
-                    <span className="bg-[#1A2235] border border-white/5 text-[10px] font-bold tracking-wider text-gray-300 px-3 py-1.5 rounded uppercase">Strategy</span>
-                    <span className="bg-[#1A2235] border border-white/5 text-[10px] font-bold tracking-wider text-gray-300 px-3 py-1.5 rounded uppercase">React</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+      <main className="max-w-5xl mx-auto px-6 py-10">
+        {/* Welcome */}
+        <div className="mb-10">
+          <h1 className="font-display text-3xl font-extrabold mb-1">
+            Welcome back, {user?.name?.split(" ")[0]} 👋
+          </h1>
+          <p className="text-slate-400">Here are your top internship matches today.</p>
         </div>
 
-        {/* Right Column (Sidebar Content) */}
-        <div className="space-y-6 sm:space-y-8 xl:col-span-1">
-          
-          {/* Quick Skill Gap Card */}
-          <div className="bg-[#131B2B] p-5 sm:p-8 rounded-2xl border border-white/5 shadow-xl border-t-2 border-t-pink-500">
-            <div className="flex items-center gap-3 mb-6">
-              <AlertCircle className="w-5 h-5 text-pink-500" />
-              <h3 className="text-sm font-bold text-pink-500 tracking-widest uppercase">Quick Skill Gap</h3>
+        {/* Stats */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+          {stats.map((s) => (
+            <div key={s.label} className="card p-5">
+              <div className="text-2xl mb-2">{s.icon}</div>
+              <div className="font-display text-3xl font-extrabold text-blue-400">{s.number}</div>
+              <div className="text-xs text-slate-500 mt-1">{s.label}</div>
             </div>
-            
-            <p className="text-sm text-gray-400 leading-relaxed mb-6">
-              Our curator engine identified a missing proficiency that is appearing in <span className="font-bold text-white">78% of your ideal roles.</span>
-            </p>
-
-            <div className="bg-[#06090F] p-4 sm:p-5 rounded-xl border border-white/5 mb-6 flex justify-between items-center">
-              <div>
-                <div className="text-[10px] font-bold text-gray-500 tracking-widest uppercase mb-1">Missing Skill</div>
-                <div className="text-lg sm:text-xl font-bold text-white">Next.js</div>
-              </div>
-              <div className="flex">
-                <ChevronLeft className="w-5 h-5 text-gray-600" />
-                <ChevronRight className="w-5 h-5 text-gray-400" />
-              </div>
-            </div>
-
-            <button className="w-full py-3 sm:py-4 bg-[#1A2235] hover:bg-[#232D45] border border-white/5 rounded-xl text-xs font-bold tracking-widest text-white uppercase transition-colors">
-              Explore Pathways
-            </button>
-          </div>
-
-          {/* Boost Your Matches Promo Card */}
-          <div className="relative p-5 sm:p-8 rounded-2xl border border-white/5 shadow-xl overflow-hidden bg-gradient-to-br from-[#1A2342] to-[#131B2B]">
-            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPgo8cmVjdCB3aWR0aD0iOCIgaGVpZ2h0PSI4IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDEiLz4KPHBhdGggZD0iTTAgMGg4djhIMHoiIGZpbGw9Im5vbmUiLz4KPC9zdmc+')] opacity-20"></div>
-            
-            <div className="relative z-10 flex flex-col sm:flex-row xl:flex-col items-start sm:items-center xl:items-start justify-between gap-4 sm:gap-6">
-              <div>
-                <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 leading-tight">Boost Your<br/>Matches</h3>
-                <p className="text-sm text-gray-400 leading-relaxed max-w-[250px]">
-                  Unlock premium insights and get prioritized by hiring curators.
-                </p>
-              </div>
-              <button className="w-full sm:w-auto xl:w-full py-3 sm:py-4 px-6 bg-[#8B7CFF] hover:bg-[#7a6ce0] text-white rounded-xl text-xs font-bold tracking-widest uppercase transition-colors shadow-lg shadow-[#8B7CFF]/20 whitespace-nowrap">
-                Upgrade to Pro
-              </button>
-            </div>
-          </div>
-
-          {/* Career Trajectory Widget */}
-          <div className="bg-[#131B2B] p-5 sm:p-8 rounded-2xl border border-white/5 shadow-xl">
-            <h3 className="text-xs font-bold text-gray-400 tracking-widest uppercase mb-6 sm:mb-8">Career Trajectory</h3>
-            <div className="relative pl-8 border-l border-white/10 ml-4 space-y-8 sm:space-y-10">
-              
-              <div className="relative">
-                <div className="absolute w-3 h-3 bg-[#8B7CFF] rounded-full -left-[2.35rem] top-1 shadow-[0_0_10px_rgba(139,124,255,0.5)]"></div>
-                <div className="absolute w-5 h-5 border border-[#8B7CFF]/50 rounded-full -left-[2.6rem] -top-0.5"></div>
-                <p className="text-[10px] font-bold text-gray-500 tracking-widest uppercase mb-1">Current Status</p>
-                <p className="text-sm font-bold text-white">Curating New Opportunities</p>
-              </div>
-
-              <div className="relative">
-                <div className="absolute w-1.5 h-1.5 bg-gray-600 rounded-full -left-[2.15rem] top-1.5"></div>
-                <p className="text-[10px] font-bold text-gray-600 tracking-widest uppercase mb-1">Next Milestone</p>
-                <p className="text-sm font-medium text-gray-500">First Interview Selection</p>
-              </div>
-
-            </div>
-          </div>
-
+          ))}
         </div>
-      </div>
+
+        {/* Internship matches */}
+        <h2 className="font-display text-xl font-bold mb-4">🎯 Top Matches for You</h2>
+        <div className="space-y-4">
+          {mockInternships.map((job) => (
+            <div key={job.id} className="card p-5 flex items-start justify-between gap-4 hover:border-blue-500/30 transition-colors">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-1">
+                  <h3 className="font-semibold text-white">{job.title}</h3>
+                  <span className="text-xs">{matchDot(job.match)}</span>
+                </div>
+                <p className="text-sm text-slate-400 mb-3">{job.company} · {job.location} · <span className="capitalize">{job.type}</span></p>
+                <div className="flex flex-wrap gap-2">
+                  {job.skills.map((sk) => (
+                    <span key={sk} className="text-xs px-2 py-1 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20">{sk}</span>
+                  ))}
+                </div>
+              </div>
+              <div className="text-right shrink-0">
+                <div className={`text-sm font-bold px-3 py-1 rounded-lg mb-2 ${matchColor(job.match)}`}>
+                  {job.match}% match
+                </div>
+                <div className="text-xs text-slate-500">৳{job.stipend.toLocaleString()}/mo</div>
+                <button className="mt-2 text-xs px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors">
+                  Apply
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </main>
     </div>
   );
-};
-
-export default StudentDashboard;
+}

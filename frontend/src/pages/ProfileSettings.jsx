@@ -79,7 +79,7 @@ const ProfileSettings = ({ role }) => {
         }
 
         const config = { headers: { Authorization: `Bearer ${token}` } };
-        const { data } = await axios.get('http://localhost:5000/api/auth/me', config);
+        const { data } = await axios.get('http://localhost:5001/api/auth/me', config);
         const user = data.data;
         setPersonalInfo({ name: user.name || '', email: user.email || '' });
         setProfilePic(user.profilePic || null);
@@ -133,7 +133,7 @@ const ProfileSettings = ({ role }) => {
         payload.password = passwords.new;
       }
 
-      await axios.put('http://localhost:5000/api/auth/profile', payload, config);
+      await axios.put('http://localhost:5001/api/auth/profile', payload, config);
       setIsSaving(false);
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 3000);
@@ -149,7 +149,7 @@ const ProfileSettings = ({ role }) => {
       const token = localStorage.getItem('token');
       if (token) {
         const config = { headers: { Authorization: `Bearer ${token}` } };
-        await axios.delete('http://localhost:5000/api/auth/profile', config);
+        await axios.delete('http://localhost:5001/api/auth/profile', config);
       }
       localStorage.clear();
       navigate('/login');

@@ -3,7 +3,7 @@ Alright — now you need the FINAL, CLEAN, COMPLETE BACKEND API ENDPOINT LIST
 Think of this as your API contract.
 
 🚀 BASE
-http://localhost:5000/api
+http://localhost:5001/api
 
 
 🔐 AUTH MODULE

@@ -1,163 +1,184 @@
-import React, { useState } from 'react';
-import { Mail, Lock, User, Briefcase, Loader2, BookOpen } from 'lucide-react';
-import AuthLayout from '../components/AuthLayout';
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../app/hooks.js";
+import { registerUser, clearError } from "../../features/auth/authSlice.js";
 
-import { useNavigate } from 'react-router-dom';
-
-const Register = () => {
-  const [formData, setFormData] = useState({ 
-    name: '', 
-    email: '', 
-    password: '',
-    role: 'student'
-  });
-  const [isLoading, setIsLoading] = useState(false);
+export default function Register() {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { loading, error, token } = useAppSelector((s) => s.auth);
+
+  const [form, setForm] = useState({ name: "", email: "", password: "", confirmPassword: "", role: "student" });
+  const [showPass, setShowPass] = useState(false);
+  const [localError, setLocalError] = useState("");
+
+  useEffect(() => {
+    if (token) navigate("/dashboard");
+  }, [token, navigate]);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    dispatch(clearError());
+    setLocalError("");
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    try {
-      const response = await fetch('http://localhost:5000/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, role: formData.role })
-      });
-      const data = await response.json();
-      
-      if (response.ok && data.success) {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('userRole', data.user.role);
-        setIsLoading(false);
-        navigate('/dashboard');
-      } else {
-        alert(data.message || 'Registration failed');
-        setIsLoading(false);
-      }
-    } catch (error) {
-      console.error('Registration error:', error);
-      alert('Network error. Ensure backend is running.');
-      setIsLoading(false);
+    if (form.password !== form.confirmPassword) {
+      setLocalError("Passwords do not match.");
+      return;
     }
+    if (form.password.length < 6) {
+      setLocalError("Password must be at least 6 characters.");
+      return;
+    }
+    const { confirmPassword, ...submitData } = form;
+    dispatch(registerUser(submitData));
   };
+
+  const displayError = localError || error;
 
   return (
-    <AuthLayout>
-      <div className="mb-8">
-        <h2 className="text-3xl font-bold text-white mb-2">Create Account</h2>
-        <p className="text-gray-400 text-sm">Join the network to start your journey.</p>
+    <div className="min-h-screen flex">
+      {/* ── LEFT PANEL ── */}
+      <div className="hidden lg:flex flex-col justify-center flex-1 px-16 relative overflow-hidden bg-gradient-to-br from-[#0d1426] to-[#111827]">
+        <div className="absolute w-96 h-96 bg-blue-500/10 rounded-full -top-20 -left-20 blur-3xl" />
+        <div className="absolute w-80 h-80 bg-violet-500/10 rounded-full -bottom-10 right-10 blur-3xl" />
+        <div className="relative z-10">
+          <div className="flex items-center gap-3 mb-16">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center text-xl">🚀</div>
+            <span className="font-display text-2xl font-bold">Inter<span className="text-blue-400">nova</span></span>
+          </div>
+          <h1 className="font-display text-5xl font-extrabold leading-tight mb-5">
+            Start Your <span className="bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">Career</span><br />Journey Today
+          </h1>
+          <p className="text-slate-400 text-lg leading-relaxed max-w-md">
+            Join thousands of students who found their dream internships through Internova's smart matching system.
+          </p>
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-5">
-        <div>
-          <label className="block text-xs font-bold text-gray-400 mb-2 tracking-wider uppercase">Full Name</label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <User className="h-5 w-5 text-gray-500" />
-            </div>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              className="block w-full pl-12 pr-4 py-3 bg-[#06090F] border border-white/5 rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-[#8B7CFF] focus:ring-1 focus:ring-[#8B7CFF] transition-all text-sm"
-              placeholder="John Doe"
-              required
-            />
+      {/* ── RIGHT PANEL ── */}
+      <div className="flex items-center justify-center w-full lg:w-[500px] px-8 py-12 bg-[#111827] border-l border-white/5 overflow-y-auto">
+        <div className="w-full max-w-sm">
+          <div className="flex items-center gap-2 mb-8 lg:hidden">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center">🚀</div>
+            <span className="font-display text-xl font-bold">Inter<span className="text-blue-400">nova</span></span>
           </div>
-        </div>
 
-        <div>
-          <label className="block text-xs font-bold text-gray-400 mb-2 tracking-wider uppercase">Email Address</label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <Mail className="h-5 w-5 text-gray-500" />
-            </div>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="block w-full pl-12 pr-4 py-3 bg-[#06090F] border border-white/5 rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-[#8B7CFF] focus:ring-1 focus:ring-[#8B7CFF] transition-all text-sm"
-              placeholder="name@internova.com"
-              required
-            />
+          <h2 className="font-display text-3xl font-bold mb-1">Join Internova 🎓</h2>
+          <p className="text-slate-400 text-sm mb-8">Create your free account today</p>
+
+          {/* Role selector */}
+          <div className="grid grid-cols-2 gap-3 mb-6">
+            {[
+              { value: "student", icon: "🎓", label: "Student", desc: "Find internships" },
+              { value: "company", icon: "🏢", label: "Company", desc: "Post openings" },
+            ].map((r) => (
+              <button
+                key={r.value}
+                type="button"
+                onClick={() => setForm({ ...form, role: r.value })}
+                className={`p-4 rounded-xl border text-left transition-all ${
+                  form.role === r.value
+                    ? "border-blue-500 bg-blue-500/10"
+                    : "border-white/10 hover:border-white/20"
+                }`}
+              >
+                <div className="text-2xl mb-1">{r.icon}</div>
+                <div className="text-sm font-semibold">{r.label}</div>
+                <div className="text-xs text-slate-500">{r.desc}</div>
+              </button>
+            ))}
           </div>
-        </div>
 
-        <div>
-          <label className="block text-xs font-bold text-gray-400 mb-2 tracking-wider uppercase">Password</label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <Lock className="h-5 w-5 text-gray-500" />
+          {displayError && (
+            <div className="mb-4 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+              ❌ {displayError}
             </div>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              className="block w-full pl-12 pr-4 py-3 bg-[#06090F] border border-white/5 rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-[#8B7CFF] focus:ring-1 focus:ring-[#8B7CFF] transition-all text-sm tracking-widest"
-              placeholder="••••••••"
-              minLength={6}
-              required
-            />
-          </div>
-        </div>
+          )}
 
-        <div>
-          <label className="block text-xs font-bold text-gray-400 mb-2 tracking-wider uppercase">Account Type</label>
-          <div className="grid grid-cols-2 gap-3">
-            <label className={`
-              flex items-center justify-center py-3 px-4 rounded-lg border cursor-pointer transition-all duration-200
-              ${formData.role === 'student' 
-                ? 'bg-[#8B7CFF]/10 border-[#8B7CFF]/50 text-[#8B7CFF]' 
-                : 'bg-[#06090F] border-white/5 text-gray-500 hover:bg-[#0A0E17] hover:text-gray-300'}
-            `}>
-              <input 
-                type="radio" 
-                name="role" 
-                value="student" 
-                checked={formData.role === 'student'}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-xs font-medium text-slate-400 mb-2">Full Name</label>
+              <input
+                type="text"
+                name="name"
+                value={form.name}
                 onChange={handleChange}
-                className="sr-only" 
+                placeholder="Maria Nusrat"
+                required
+                className="input-field"
               />
-              <BookOpen className="w-4 h-4 mr-2" />
-              <span className="font-semibold text-sm">Student</span>
-            </label>
-            <label className={`
-              flex items-center justify-center py-3 px-4 rounded-lg border cursor-pointer transition-all duration-200
-              ${formData.role === 'company' 
-                ? 'bg-[#8B7CFF]/10 border-[#8B7CFF]/50 text-[#8B7CFF]' 
-                : 'bg-[#06090F] border-white/5 text-gray-500 hover:bg-[#0A0E17] hover:text-gray-300'}
-            `}>
-              <input 
-                type="radio" 
-                name="role" 
-                value="company" 
-                checked={formData.role === 'company'}
-                onChange={handleChange}
-                className="sr-only" 
-              />
-              <Briefcase className="w-4 h-4 mr-2" />
-              <span className="font-semibold text-sm">Company</span>
-            </label>
-          </div>
-        </div>
+            </div>
 
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="w-full flex justify-center items-center py-3.5 px-4 rounded-lg shadow-sm text-sm font-bold text-[#131B2B] bg-[#8B7CFF] hover:bg-white focus:outline-none transition-all duration-200 mt-4 disabled:opacity-70 disabled:cursor-not-allowed"
-        >
-          {isLoading ? <Loader2 className="w-5 h-5 animate-spin text-[#131B2B]" /> : 'Create Account'}
-        </button>
-      </form>
-    </AuthLayout>
+            <div>
+              <label className="block text-xs font-medium text-slate-400 mb-2">Email address</label>
+              <input
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                placeholder="you@university.edu"
+                required
+                className="input-field"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-slate-400 mb-2">Password</label>
+              <div className="relative">
+                <input
+                  type={showPass ? "text" : "password"}
+                  name="password"
+                  value={form.password}
+                  onChange={handleChange}
+                  placeholder="Min. 6 characters"
+                  required
+                  className="input-field pr-12"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPass(!showPass)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                >
+                  {showPass ? "🙈" : "👁"}
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-slate-400 mb-2">Confirm Password</label>
+              <input
+                type="password"
+                name="confirmPassword"
+                value={form.confirmPassword}
+                onChange={handleChange}
+                placeholder="Repeat your password"
+                required
+                className="input-field"
+              />
+            </div>
+
+            <button type="submit" disabled={loading} className="btn-primary">
+              {loading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" className="opacity-25" />
+                    <path d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" fill="currentColor" />
+                  </svg>
+                  Creating account…
+                </span>
+              ) : "Create Account"}
+            </button>
+          </form>
+
+          <p className="text-center text-sm text-slate-500 mt-6">
+            Already have an account?{" "}
+            <Link to="/login" className="text-blue-400 hover:underline font-medium">Sign in</Link>
+          </p>
+        </div>
+      </div>
+    </div>
   );
-};
-
-export default Register;
+}
